@@ -27,3 +27,4 @@ anyhow = "1.0.93"
 argon2 = "0.5.3"
 rand = "0.8.5"
 jsonwebtoken = { version = "9", default-features = false }
+uuid = { version = "1.10", features = ["v4", "serde"] }
