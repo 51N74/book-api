@@ -3,7 +3,7 @@ use std::sync::Arc;
 use book_api::{
     config::config_loader,
     // infrastructure::{axum_http::http_serve::start, postgres::postgres_connection},
-    infrastructure::{postgres::postgres_connection},
+    infrastructure::{axum_http::http_serve::start, postgres::postgres_connection},
 };
 use tracing::info;
 
@@ -39,32 +39,10 @@ async fn main() {
 
     info!("Postgres connection has been established");
 
-    // start(Arc::new(dotenvy_env), Arc::new(postgres_pool))
-    //     .await
-    //     .expect("Failed to start the server");
-
-    start()
+    start(Arc::new(dotenvy_env), Arc::new(postgres_pool))
+    .await
+    .expect("Failed to start the server");
+    
   
         
-}
-
-
-#[tokio::main]
-async fn start() {
-    
-    // build our application with a route
-    let app = Router::new()
-        // `GET /` goes to `root`
-        .route("/", get(root));
-        // `POST /users` goes to `create_user`
-        
-
-    // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
-}
-
-// basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
 }
