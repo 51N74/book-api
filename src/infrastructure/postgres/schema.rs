@@ -7,6 +7,8 @@ diesel::table! {
         author -> Varchar,
         category_id -> Uuid,
         price -> Numeric,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
     }
 }
 

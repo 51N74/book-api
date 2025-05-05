@@ -6,4 +6,4 @@ file = "src/infrastructure/postgres/schema.rs"
 custom_type_derives = ["diesel::query_builder::QueryId", "Clone"]
 
 [migrations_directory]
-dir = "/Users/jptns/Coding/book_api/src/infrastructure/postgres/migrations"
+dir = "/Users/jptns/Coding/book-api/src/infrastructure/postgres/migrations"

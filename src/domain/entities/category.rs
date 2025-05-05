@@ -1,8 +1,21 @@
+use diesel::prelude::*;
 use uuid::Uuid;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Category{
-    pub id :Uuid,
-    pub name:String,
+use crate::infrastructure::postgres::schema::categories;
+
+#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+#[diesel(table_name = categories)]
+pub struct CategoryEntity {
+    pub id: Uuid,
+    pub name: String,
+    
 }
+
+#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+#[diesel(table_name = categories)]
+pub struct RegisterCategoryEntity {
+    pub id: Uuid,
+    pub name: String,
+}
+
