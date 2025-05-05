@@ -1,37 +1,26 @@
 
+use std::sync::Arc;
+
 use uuid::Uuid;
+use anyhow::Result;
+use crate::{domain::{entities::category::CategoryEntity, repositories::category::CategoryRepository, value_objects::category_model::CategoryModel}, infrastructure::postgres::schema::categories};
 
-use crate::{domain::{entities::category::CategoryEntity, repositories::category::CategoryRepository}, infrastructure::postgres::schema::categories};
 
 
-
-pub struct CategoryService<T: CategoryRepository> {
-    repository: T,
+pub struct CategoryService<T>
+where T: CategoryRepository + Send + Sync
+{
+    pub category_repository:Arc<T>
 }
 
-impl<T: CategoryRepository> CategoryService<T> {
-    pub fn new(repository: T) -> Self {
-        Self { repository }
+impl<T>CategoryService<T>
+where T: CategoryRepository + Sync + Send 
+ {
+    pub fn new(category_repository: Arc<T>) -> Self {
+        Self { category_repository }
     }
 
-    pub fn add_category(&self, category: CategoryEntity) -> Result<CategoryEntity, String> {
-        self.repository.create(category)
-    }
-
-    pub fn get_category(&self, id: Uuid) -> Result<Option<CategoryEntity>, String> {
-        self.repository.find_by_id(id)
-    }
-
-    pub fn search_categorys(&self, query: Option<String>) -> Result<Vec<CategoryEntity>, String> {
-        self.repository.find_all(query)
-    }
-
-    pub fn update_category(&self, category: CategoryEntity) -> Result<CategoryEntity, String> {
-        self.repository.update(category)
-    }
-
-    pub fn delete_category(&self, id: Uuid) -> Result<(), String> {
-        self.repository.delete(id)
-    }
-
-}
+    pub async fn create(&self,mut register_category_model:CategoryModel ) ->Result<i32> {
+        unimplemented!()
+    }   
+   }

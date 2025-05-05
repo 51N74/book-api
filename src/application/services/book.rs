@@ -1,6 +1,6 @@
 use std::sync::Arc;
-
-use crate::domain::repositories::book::BookRepository;
+use anyhow::Result;
+use crate::domain::{repositories::book::BookRepository, value_objects::book_model::RegisterBookModel};
 
 pub struct BookService<T>
 where T: BookRepository + Sync + Send 
@@ -15,7 +15,7 @@ where T: BookRepository + Sync + Send
         Self { book_repositoriy }
     }
 
-    pub async fn create(&self, book: T::Entity) -> Result<i32, String> {
-        self.book_repositoriy.create(book).await
+    pub async fn create(&self,mut register_book_model:RegisterBookModel ) ->Result<i32> {
+        unimplemented!()
     }
 }
