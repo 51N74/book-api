@@ -1,6 +1,14 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    admin (id) {
+        id -> Uuid,
+        username -> Varchar,
+        password -> Varchar,
+    }
+}
+
+diesel::table! {
     books (id) {
         id -> Uuid,
         title -> Varchar,
@@ -30,6 +38,7 @@ diesel::table! {
 diesel::joinable!(books -> categories (category_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
+    admin,
     books,
     categories,
     users,
