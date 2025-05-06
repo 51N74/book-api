@@ -5,6 +5,8 @@ diesel::table! {
         id -> Uuid,
         username -> Varchar,
         password -> Varchar,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
     }
 }
 
@@ -32,6 +34,8 @@ diesel::table! {
         id -> Uuid,
         username -> Varchar,
         password -> Varchar,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
     }
 }
 
