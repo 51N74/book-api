@@ -1,4 +1,4 @@
-pub mod book;
+pub mod book_ops;
 pub mod category;
 pub mod user;
 pub mod admin;
