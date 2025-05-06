@@ -2,20 +2,23 @@
 
 diesel::table! {
     admin (id) {
-        id -> Uuid,
+        id -> Int4,
+        #[max_length = 255]
         username -> Varchar,
+        #[max_length = 255]
         password -> Varchar,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
 diesel::table! {
     books (id) {
-        id -> Uuid,
+        id -> Int4,
         title -> Varchar,
+        description -> Nullable<Text>,
         author -> Varchar,
-        category_id -> Uuid,
+        category_id -> Int4,
         price -> Numeric,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
@@ -24,18 +27,20 @@ diesel::table! {
 
 diesel::table! {
     categories (id) {
-        id -> Uuid,
+        id -> Int4,
         name -> Varchar,
     }
 }
 
 diesel::table! {
     users (id) {
-        id -> Uuid,
+        id -> Int4,
+        #[max_length = 255]
         username -> Varchar,
+        #[max_length = 255]
         password -> Varchar,
-        created_at -> Nullable<Timestamp>,
-        updated_at -> Nullable<Timestamp>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
