@@ -13,15 +13,26 @@ diesel::table! {
 }
 
 diesel::table! {
+    book_user_junction (book_id, user_id) {
+        book_id -> Int4,
+        user_id -> Int4,
+    }
+}
+
+diesel::table! {
     books (id) {
         id -> Int4,
         title -> Varchar,
         description -> Nullable<Text>,
         author -> Varchar,
+        #[max_length = 255]
+        status -> Varchar,
+        admin_id -> Int4,
         category_id -> Int4,
-        price -> Numeric,
+        price -> Int4,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
+        deleted_at -> Nullable<Timestamp>,
     }
 }
 
@@ -29,6 +40,8 @@ diesel::table! {
     categories (id) {
         id -> Int4,
         name -> Varchar,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
 
@@ -44,10 +57,12 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(books -> admin (admin_id));
 diesel::joinable!(books -> categories (category_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     admin,
+    book_user_junction,
     books,
     categories,
     users,
