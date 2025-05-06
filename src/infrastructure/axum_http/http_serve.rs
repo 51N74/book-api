@@ -10,11 +10,15 @@ use tower_http::{
     trace::TraceLayer,
 };
 use tracing::info;
-use crate::{config::config_model::DotEnvyConfig, infrastructure::{axum_http::default_routers, postgres::postgres_connection::PgPoolSquad}};
+use crate::{config::config_model::DotEnvyConfig, infrastructure::{axum_http::{default_routers, routers}, postgres::postgres_connection::PgPoolSquad}};
 
 pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Result<()>{
     let app = Router::new()
     .fallback(default_routers::not_found)
+    .nest(
+        "/admin",
+        routers::admin::routes(Arc::clone(&db_pool)),
+    )
     .route("/health-check", get(default_routers::health_check))
     .layer(TimeoutLayer::new(Duration::from_secs(
         config.server.timeout,
