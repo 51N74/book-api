@@ -1,21 +1,24 @@
+use chrono::NaiveDateTime;
 use diesel::prelude::*;
-use uuid::Uuid;
-use serde::{Deserialize, Serialize};
+
 
 use crate::infrastructure::postgres::schema::users;
 
-#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+#[derive(Debug, Clone, Identifiable, Selectable, Queryable)]
 #[diesel(table_name = users)]
 pub struct UserEntity{
-    pub id:Uuid,
+    pub id:i32,
     pub username:String,
     pub password:String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }
 
-#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+#[derive(Debug, Clone, Insertable, Queryable)]
 #[diesel(table_name = users)]
 pub struct RegisterUserEntity{
-    pub id:Uuid,
-    pub username:String,
-    pub password:String,
+    pub username: String,
+    pub password: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }

@@ -1,36 +1,46 @@
 use std::sync::Arc;
 
-use axum::async_trait;
 use anyhow::Result;
-use uuid::Uuid;
+use axum::async_trait;
+use diesel::prelude::*;
+use diesel::{insert_into, RunQueryDsl};
 
-use crate::{domain::{entities::user::UserEntity, repositories::user::{self, UserRepository}}, infrastructure::postgres::postgres_connection::PgPoolSquad};
+use crate::domain::entities::user::{RegisterUserEntity, UserEntity};
+use crate::domain::repositories::user::UserRepository;
+use crate::infrastructure::postgres::postgres_connection::PgPoolSquad;
+use crate::infrastructure::postgres::schema::users;
 
-pub struct UserPostgres{
-    db_pool:Arc<PgPoolSquad>
+pub struct UserPostgres {
+    db_pool: Arc<PgPoolSquad>,
 }
 
 impl UserPostgres {
     pub fn new(db_pool: Arc<PgPoolSquad>) -> Self {
-        Self { db_pool} 
+        Self { db_pool }
     }
 }
 
 #[async_trait]
 impl UserRepository for UserPostgres {
-    async fn create(&self, user: UserEntity) -> Result<i32>{
-        unimplemented!()
+    async fn register(&self, register_user_entity: RegisterUserEntity) -> Result<i32> {
+        let mut conn = Arc::clone(&self.db_pool).get()?;
+
+        let result = insert_into(users::table)
+            .values(&register_user_entity)
+            .returning(users::id)
+            .get_result::<i32>(&mut conn)?;
+
+        Ok(result)
     }
-    async fn find_by_id(&self, id: Uuid) -> Result<Option<UserEntity>, String>{
-        unimplemented!()
-    }
-    async fn find_all(&self, query: Option<String>) -> Result<Vec<UserEntity>, String>{
-        unimplemented!()
-    }
-    async fn update(&self, user: UserEntity) -> Result<UserEntity, String>{
-        unimplemented!()
-    }
-    async fn delete(&self, id: Uuid) -> Result<(), String>{
-        unimplemented!()
+
+    async fn find_by_username(&self, username: String) -> Result<UserEntity> {
+        let mut conn = Arc::clone(&self.db_pool).get()?;
+
+        let result = users::table
+            .filter(users::username.eq(username))
+            .select(UserEntity::as_select())
+            .first::<UserEntity>(&mut conn)?;
+
+        Ok(result)
     }
 }

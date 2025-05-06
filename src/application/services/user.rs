@@ -1,25 +1,42 @@
-
 use std::sync::Arc;
 
-use uuid::Uuid;
 use anyhow::Result;
 
-use crate::domain::{repositories::user::UserRepository, value_objects::user_model::UserModel};
+use crate::{domain::{repositories::user::UserRepository, value_objects::user_model::RegisterUserModel}, infrastructure::argon2_hashing};
+
 
 pub struct UserService<T>
-where T: UserRepository + Send + Sync
+where
+    T: UserRepository + Send + Sync,
 {
-    pub user_repository:Arc<T>
+    user_repository: Arc<T>,
 }
 
-impl<T>UserService<T>
-where T: UserRepository + Sync + Send 
- {
+impl<T> UserService<T>
+where
+    T: UserRepository + Send + Sync,
+{
     pub fn new(user_repository: Arc<T>) -> Self {
-        Self { user_repository }
+        Self {
+            user_repository,
+        }
     }
 
-    pub async fn create(&self,mut register_user_model:UserModel ) ->Result<i32> {
-        unimplemented!()
-    }   
-   }
+    pub async fn register(
+        &self,
+        mut register_user_model: RegisterUserModel,
+    ) -> Result<i32> {
+        let hashed_password = argon2_hashing::hash(register_user_model.password.clone())?;
+
+        register_user_model.password = hashed_password;
+
+        let register_entity = register_user_model.to_entity();
+
+        let user_id = self
+            .user_repository
+            .register(register_entity)
+            .await?;
+
+        Ok(user_id)
+    }
+}
