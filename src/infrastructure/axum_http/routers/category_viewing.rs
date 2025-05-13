@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
     routing::get,
@@ -31,7 +31,7 @@ where
     T: CategoryViewingRepository + Send + Sync,
 {
     match category_viewing_service.view_details(category_id).await {
-        Ok(book_model) => (StatusCode::OK, Json(book_model)).into_response(),
+        Ok(category_model) => (StatusCode::OK, Json(category_model)).into_response(),
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
 }

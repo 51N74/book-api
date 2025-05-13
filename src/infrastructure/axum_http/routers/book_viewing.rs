@@ -8,7 +8,7 @@ use axum::{
     Json, Router,
 };
 
-use crate::{application::services::book_viewing::BookViewingService, domain::repositories::book_viewing::BookViewingRepository, infrastructure::postgres::{postgres_connection::PgPoolSquad, repositories::book_viewing::BookViewingPostgres}};
+use crate::{application::services::book_viewing::BookViewingService, domain::{repositories::book_viewing::BookViewingRepository, value_objects::book_viewing_filter::BookViewingFilter}, infrastructure::postgres::{postgres_connection::PgPoolSquad, repositories::book_viewing::BookViewingPostgres}};
 
 
 pub fn routes(db_pool: Arc<PgPoolSquad>) -> Router {
@@ -17,7 +17,7 @@ pub fn routes(db_pool: Arc<PgPoolSquad>) -> Router {
 
     Router::new()
         .route("/:book_id", get(view_details))
-        // .route("/board-checking", get(board_checking))
+        .route("/book-checking", get(book_checking))
         .with_state(Arc::new(book_viewing_service))
 }
 
@@ -34,15 +34,15 @@ where
     }
 }
 
-// pub async fn board_checking<T>(
-//     State(quest_viewing_use_case): State<Arc<QuestViewingUseCase<T>>>,
-//     filter: Query<BoardCheckingFilter>,
-// ) -> impl IntoResponse
-// where
-//     T: QuestViewingRepository + Send + Sync,
-// {
-//     match quest_viewing_use_case.board_checking(&filter).await {
-//         Ok(quest_models) => (StatusCode::OK, Json(quest_models)).into_response(),
-//         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
-//     }
-// }
+pub async fn book_checking<T>(
+    State(book_viewing_service): State<Arc<BookViewingService<T>>>,
+    filter: Query<BookViewingFilter>,
+) -> impl IntoResponse
+where
+    T: BookViewingRepository + Send + Sync,
+{
+    match book_viewing_service.book_viewing(&filter).await {
+        Ok(book_models) => (StatusCode::OK, Json(book_models)).into_response(),
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}

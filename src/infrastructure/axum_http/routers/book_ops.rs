@@ -24,7 +24,7 @@ pub fn routes(db_pool: Arc<PgPoolSquad>) -> Router {
     );
 
     Router::new()
-        .route("/add", post(add))
+        .route("/", post(add))
         .route("/:book_id", patch(edit))
         .route("/:book_id", delete(remove))
         .route_layer(middleware::from_fn(admin_authorization))
@@ -45,7 +45,7 @@ where
         .await
     {
         Ok(book_id_result) => {
-            let response = format!("Add quest success with id: {}", book_id_result);
+            let response = format!("Add Book success with id: {}", book_id_result);
             (StatusCode::CREATED, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),

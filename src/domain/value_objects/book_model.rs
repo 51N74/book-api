@@ -23,6 +23,9 @@ pub struct AddBookModel {
     pub title: String,
     pub description: Option<String>,
     pub author: String,
+    pub category_id: i32,
+    pub price: i32,
+    pub status: String,
    
 }
 
@@ -33,8 +36,8 @@ impl AddBookModel {
             description: self.description.clone(),
             author: self.author.clone(),
             admin_id,
-            category_id: 0,
-            price:0,
+            category_id:self.category_id,
+            price:self.price,
             status: crate::domain::value_objects::book_statuses::BookStatuses::Open.to_string(),
             created_at: chrono::Utc::now().naive_utc(),
             updated_at: chrono::Utc::now().naive_utc(),
