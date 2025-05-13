@@ -1,14 +1,14 @@
 use std::sync::Arc;
 
 use axum::{
-    extract::{Path, State},
+     extract::{Path, Query, State},
     http::StatusCode,
     response::IntoResponse,
     routing::get,
     Json, Router,
 };
 
-use crate::{application::services::category_viewing::CategoryViewingService, domain::repositories::category_viewing::CategoryViewingRepository, infrastructure::postgres::{postgres_connection::PgPoolSquad, repositories::category_viewing::CategoryViewingPostgres}};
+use crate::{application::services::category_viewing::CategoryViewingService, domain::{repositories::category_viewing::CategoryViewingRepository, value_objects::category_viewing_filter::CategoryViewingFilter}, infrastructure::postgres::{postgres_connection::PgPoolSquad, repositories::category_viewing::CategoryViewingPostgres}};
 
 
 
@@ -19,7 +19,7 @@ pub fn routes(db_pool: Arc<PgPoolSquad>) -> Router {
 
     Router::new()
         .route("/:category_id", get(view_details))
-        // .route("/board-checking", get(board_checking))
+        .route("/category-checking", get(category_checking))
         .with_state(Arc::new(category_viewing_service))
 }
 
@@ -36,15 +36,15 @@ where
     }
 }
 
-// pub async fn board_checking<T>(
-//     State(quest_viewing_use_case): State<Arc<QuestViewingUseCase<T>>>,
-//     filter: Query<BoardCheckingFilter>,
-// ) -> impl IntoResponse
-// where
-//     T: QuestViewingRepository + Send + Sync,
-// {
-//     match quest_viewing_use_case.board_checking(&filter).await {
-//         Ok(quest_models) => (StatusCode::OK, Json(quest_models)).into_response(),
-//         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
-//     }
-// }
+pub async fn category_checking<T>(
+    State(category_viewing_service): State<Arc<CategoryViewingService<T>>>,
+    filter: Query<CategoryViewingFilter>,
+) -> impl IntoResponse
+where
+    T: CategoryViewingRepository + Send + Sync,
+{
+    match category_viewing_service.category_viewing(&filter).await {
+        Ok(category_models) => (StatusCode::OK, Json(category_models)).into_response(),
+        Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}

@@ -49,7 +49,7 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         admin_id -> Int4,
-        book_id -> Int4,
+        book_id -> Nullable<Int4>,
         #[max_length = 255]
         status -> Varchar,
         created_at -> Nullable<Timestamp>,

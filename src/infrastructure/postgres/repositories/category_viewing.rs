@@ -7,8 +7,6 @@ use diesel::prelude::*;
 use crate::{domain::{entities::category::CategoryEntity, repositories::category_viewing::CategoryViewingRepository, value_objects::category_viewing_filter::CategoryViewingFilter}, infrastructure::postgres::{postgres_connection::PgPoolSquad, schema::{books_categories_junction, categories}}};
 
 
-
-
 pub struct CategoryViewingPostgres {
     db_pool: Arc<PgPoolSquad>,
 }
@@ -60,11 +58,10 @@ impl CategoryViewingRepository for CategoryViewingPostgres {
         let mut conn = Arc::clone(&self.db_pool).get()?;
 
         let result = books_categories_junction::table
-            .filter(books_categories_junction::category_id.eq(category_id))
+            .filter(books_categories_junction::book_id.eq(category_id))
             .count()
             .first::<i64>(&mut conn)?;
 
         Ok(result)
     }
-    
 }

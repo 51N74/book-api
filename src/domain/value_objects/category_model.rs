@@ -8,15 +8,18 @@ pub struct CategoryModel {
     pub id: i32,
     pub name: String,
     pub status: String,
+    pub book_id: Option<i32>,
     pub admin_id:i32,
+    pub user_count: i32,
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
-    pub(crate) book_id: i32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddCategoryModel {
     pub name: String,
+    pub status: String,
+
 }
 
 impl AddCategoryModel {
@@ -24,7 +27,7 @@ impl AddCategoryModel {
         AddCategoryEntity {
             name: self.name.clone(),
             admin_id,
-            status: "Open".to_string(),
+            status: crate::domain::value_objects::category_statuses::CategoryStatuses::Open.to_string(),
             created_at: chrono::Utc::now().naive_utc(),
             updated_at: chrono::Utc::now().naive_utc(),
         }

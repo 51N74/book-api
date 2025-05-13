@@ -12,7 +12,7 @@ pub struct CategoryEntity {
     pub id: i32,
     pub name: String,
     pub admin_id: i32,
-    pub book_id: i32,
+    pub book_id: Option<i32>,
     pub status: String,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
@@ -20,13 +20,14 @@ pub struct CategoryEntity {
 }
 
 impl CategoryEntity {
-    pub fn to_model(&self, user_count: i32) -> CategoryModel {
+    pub fn to_model(&self,user_count: i32) -> CategoryModel {
         CategoryModel {
             id: self.id,
             name: self.name.clone(),
             admin_id: self.admin_id,
             status: self.status.clone(),
-            book_id: self.book_id,
+            book_id: self.book_id, // Option<i32> จะถูกส่งไปยัง CategoryModel
+            user_count,
             created_at: self.created_at.unwrap_or_default(),
             updated_at: self.updated_at.unwrap_or_default(),
         }

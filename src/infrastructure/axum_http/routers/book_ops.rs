@@ -45,7 +45,7 @@ where
         .await
     {
         Ok(book_id_result) => {
-            let response = format!("Add Book success with id: {}", book_id_result);
+            let response = format!("Add Book Success With id: {}", book_id_result);
             (StatusCode::CREATED, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
@@ -67,7 +67,7 @@ where
         .await
     {
         Ok(book_id_result) => {
-            let response = format!("Edit quest success with id: {}", book_id_result);
+            let response = format!("Edit Book Success With id: {}", book_id_result);
             (StatusCode::OK, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
@@ -88,7 +88,7 @@ where
         .await
     {
         Ok(_) => {
-            let response = format!("Remove quest success with id: {}", book_id);
+            let response = format!("Remove Book Success With id: {}", book_id);
             (StatusCode::OK, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),

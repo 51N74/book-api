@@ -11,6 +11,8 @@ use axum::{
 
 
 
+
+
 use crate::{application::services::category_ops::CategoryOpsService, domain::{repositories::{category_ops::CategoryOpsRepository, category_viewing::CategoryViewingRepository}, value_objects::category_model::{AddCategoryModel, EditCategoryModel}}, infrastructure::postgres::{postgres_connection::PgPoolSquad, repositories::{category_ops::CategoryOpsPostgres, category_viewing::CategoryViewingPostgres}}};
 
 use super::middleware::admin_authorization;
@@ -47,7 +49,7 @@ where
         .await
     {
         Ok(category_id_result) => {
-            let response = format!("Add category success with id: {}", category_id_result);
+            let response = format!("Add Category Success With id: {}", category_id_result);
             (StatusCode::CREATED, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
@@ -69,7 +71,7 @@ T2: CategoryViewingRepository + Send + Sync,
         .await
     {
         Ok(category_id_result) => {
-            let response = format!("Edit Category success with id: {}", category_id_result);
+            let response = format!("Edit Category Success With id: {}", category_id_result);
             (StatusCode::OK, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
@@ -90,7 +92,7 @@ T2: CategoryViewingRepository + Send + Sync,
         .await
     {
         Ok(_) => {
-            let response = format!("Remove Category success with id: {}", category_id);
+            let response = format!("Remove Category Success With id: {}", category_id);
             (StatusCode::OK, response).into_response()
         }
         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
