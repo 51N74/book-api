@@ -4,3 +4,5 @@ pub mod user;
 pub mod admin;
 pub mod authentication;
 pub mod middleware;
+pub mod book_viewing;
+pub mod category_viewing;

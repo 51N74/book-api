@@ -32,6 +32,14 @@ pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Resul
         routers::user::routes(Arc::clone(&db_pool)),
     )
     .nest(
+            "/category-viewing",
+            routers::category_viewing::routes(Arc::clone(&db_pool)),
+        )
+    .nest(
+            "/book-viewing",
+            routers::book_viewing::routes(Arc::clone(&db_pool)),
+        )
+    .nest(
         "/authentication",
         routers::authentication::routes(Arc::clone(&db_pool)),
     )

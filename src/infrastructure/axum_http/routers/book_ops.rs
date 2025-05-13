@@ -24,7 +24,7 @@ pub fn routes(db_pool: Arc<PgPoolSquad>) -> Router {
     );
 
     Router::new()
-        .route("/", post(add))
+        .route("/add", post(add))
         .route("/:book_id", patch(edit))
         .route("/:book_id", delete(remove))
         .route_layer(middleware::from_fn(admin_authorization))
