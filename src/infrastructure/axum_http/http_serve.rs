@@ -15,6 +15,10 @@ use crate::{config::config_model::DotEnvyConfig, infrastructure::{axum_http::{de
 pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Result<()>{
     let app = Router::new()
     .fallback(default_routers::not_found)
+     .nest(
+            "/book-ledger",
+            routers::book_ledger::routes(Arc::clone(&db_pool)),
+        )
     .nest(
         "/book-ops",
         routers::book_ops::routes(Arc::clone(&db_pool)),

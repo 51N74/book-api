@@ -6,3 +6,4 @@ pub mod book_viewing;
 pub mod category_viewing;
 pub mod switchboard;
 pub mod diesel_transaction;
+pub mod book_ledger;
