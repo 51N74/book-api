@@ -38,7 +38,7 @@ impl AddBookModel {
             admin_id,
             category_id:self.category_id,
             price:self.price,
-            status: crate::domain::value_objects::book_statuses::BookStatuses::Open.to_string(),
+            status: crate::domain::value_objects::book_statuses::BookStatuses::Available.to_string(),
             created_at: chrono::Utc::now().naive_utc(),
             updated_at: chrono::Utc::now().naive_utc(),
         }

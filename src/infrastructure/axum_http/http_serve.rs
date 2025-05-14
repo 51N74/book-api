@@ -24,6 +24,10 @@ pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Resul
         routers::category_ops::routes(Arc::clone(&db_pool)),
     )
     .nest(
+            "/switchboard",
+            routers::switchboard::routes(Arc::clone(&db_pool)),
+        )
+    .nest(
         "/admin",
         routers::admin::routes(Arc::clone(&db_pool)),
     )

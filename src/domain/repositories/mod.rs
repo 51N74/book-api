@@ -7,3 +7,5 @@ pub mod book_ops;
 pub mod book_viewing;
 pub mod category;
 pub mod category_viewing;
+pub mod switchboard;
+pub mod transaction_provider;

@@ -6,3 +6,4 @@ pub mod admin;
 pub mod authentication;
 pub mod book_viewing;
 pub mod category_viewing;
+pub mod switchboard;

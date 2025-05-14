@@ -40,7 +40,7 @@ impl BookOpsRepository for BookOpsPostgres {
         let result = diesel::update(books::table)
             .filter(books::id.eq(book_id))
             .filter(books::deleted_at.is_null())
-            .filter(books::status.eq(BookStatuses::Open.to_string()))
+            .filter(books::status.eq(BookStatuses::Available.to_string()))
             .set(edit_book_entity)
             .returning(books::id)
             .get_result::<i32>(&mut conn)?;
@@ -54,7 +54,7 @@ impl BookOpsRepository for BookOpsPostgres {
         diesel::update(books::table)
             .filter(books::id.eq(book_id))
             .filter(books::deleted_at.is_null())
-            .filter(books::status.eq(BookStatuses::Open.to_string()))
+            .filter(books::status.eq(BookStatuses::Available.to_string()))
             .set((
                 books::deleted_at.eq(diesel::dsl::now),
                 books::admin_id.eq(admin_id),

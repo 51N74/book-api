@@ -6,3 +6,4 @@ pub mod book_statuses;
 pub mod book_viewing_filter;
 pub mod category_viewing_filter;
 pub mod category_statuses;
+pub mod book_user_junction;
