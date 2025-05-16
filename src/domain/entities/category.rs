@@ -1,21 +1,54 @@
+use chrono::NaiveDateTime;
 use diesel::prelude::*;
-use uuid::Uuid;
-use serde::{Deserialize, Serialize};
 
-use crate::infrastructure::postgres::schema::categories;
+use crate::{domain::value_objects::category_model::CategoryModel, infrastructure::postgres::schema::categories};
 
-#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+
+
+#[derive(Debug, Clone, Identifiable, Selectable, Queryable)]
+
 #[diesel(table_name = categories)]
 pub struct CategoryEntity {
-    pub id: Uuid,
+    pub id: i32,
     pub name: String,
-    
+    pub admin_id: i32,
+    pub book_id: Option<i32>,
+    pub status: String,
+    pub created_at: Option<NaiveDateTime>,
+    pub updated_at: Option<NaiveDateTime>,
+    pub deleted_at: Option<NaiveDateTime>,
 }
 
-#[derive(Debug,Clone, Serialize, Deserialize,Identifiable,Selectable, Queryable)]
+impl CategoryEntity {
+    pub fn to_model(&self,user_count: i32) -> CategoryModel {
+        CategoryModel {
+            id: self.id,
+            name: self.name.clone(),
+            admin_id: self.admin_id,
+            status: self.status.clone(),
+            book_id: self.book_id, // Option<i32> จะถูกส่งไปยัง CategoryModel
+            user_count,
+            created_at: self.created_at.unwrap_or_default(),
+            updated_at: self.updated_at.unwrap_or_default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Insertable, Queryable)]
 #[diesel(table_name = categories)]
-pub struct RegisterCategoryEntity {
-    pub id: Uuid,
+pub struct AddCategoryEntity {
     pub name: String,
+    pub admin_id: i32,
+    pub status: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }
 
+#[derive(Debug, Clone, Queryable, AsChangeset)]
+#[diesel(table_name = categories)]
+pub struct EditCategoryEntity {
+    pub name: Option<String>,
+    pub admin_id: i32,
+    pub status: Option<String>,
+    pub updated_at: NaiveDateTime,
+}

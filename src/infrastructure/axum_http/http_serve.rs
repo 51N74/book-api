@@ -15,10 +15,22 @@ use crate::{config::config_model::DotEnvyConfig, infrastructure::{axum_http::{de
 pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Result<()>{
     let app = Router::new()
     .fallback(default_routers::not_found)
+     .nest(
+            "/book-ledger",
+            routers::book_ledger::routes(Arc::clone(&db_pool)),
+        )
     .nest(
         "/book-ops",
         routers::book_ops::routes(Arc::clone(&db_pool)),
     )
+    .nest(
+        "/categpry-ops",
+        routers::category_ops::routes(Arc::clone(&db_pool)),
+    )
+    .nest(
+            "/switchboard",
+            routers::switchboard::routes(Arc::clone(&db_pool)),
+        )
     .nest(
         "/admin",
         routers::admin::routes(Arc::clone(&db_pool)),
@@ -27,6 +39,14 @@ pub async fn start(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>)->Resul
         "/users",
         routers::user::routes(Arc::clone(&db_pool)),
     )
+    .nest(
+            "/category-viewing",
+            routers::category_viewing::routes(Arc::clone(&db_pool)),
+        )
+    .nest(
+            "/book-viewing",
+            routers::book_viewing::routes(Arc::clone(&db_pool)),
+        )
     .nest(
         "/authentication",
         routers::authentication::routes(Arc::clone(&db_pool)),

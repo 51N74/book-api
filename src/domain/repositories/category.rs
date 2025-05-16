@@ -2,8 +2,10 @@ use axum::async_trait;
 use mockall::automock;
 use uuid::Uuid;
 
-use crate::domain::entities::category::{self, CategoryEntity};
+
 use anyhow::Result;
+
+use crate::domain::entities::category:: CategoryEntity;
 
 #[async_trait]
 #[automock]
